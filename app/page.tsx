@@ -212,7 +212,12 @@ export default function WellnessApp() {
   return (
     <div className="min-h-screen max-w-md mx-auto p-4">
 
-{!isStandalone && ( 
+<header className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold">ClarityFlow</h1>
+          <p className="text-muted-foreground">Stay focused. Grow daily. Live mindfully.</p>
+        </div>
+        {!isStandalone && ( 
           <button
             onClick={handleInstallClick} 
             className="p-2 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors"
@@ -220,18 +225,7 @@ export default function WellnessApp() {
           >
             <Plus size={20} /> 
           </button>
-        )}<header className="mb-6 flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-bold">ClarityFlow</h1>
-          <p className="text-muted-foreground">Stay focused. Grow daily. Live mindfully.</p>
-        </div>
-        <button
-          onClick={handleInstallClick} // Trigger the install prompt
-          className="p-2 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors"
-          aria-label="Install App"
-        >
-          <Plus size={20} /> {/* "+" icon */}
-        </button>
+        )}
         <button
           onClick={toggleDarkMode}
           className="p-2 rounded-full hover:bg-accent/10 transition-colors"
