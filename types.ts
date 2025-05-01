@@ -17,3 +17,18 @@ export type Goal = {
     description: string;
     date: string;
   };
+
+  export type Affirmation = {
+    id: string;
+    text: string;
+    date: string;
+    favorite: boolean;
+  };
+
+  export type GratitudeEntry = {
+    favorite: any;
+    id: string;
+    text: string;
+    date: string;
+    category: 'general' | 'people' | 'health' | 'opportunities';
+  };
