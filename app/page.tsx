@@ -160,9 +160,14 @@ export default function WellnessApp() {
 
   const [showInstallPrompt, setShowInstallPrompt] = useState(false); // State to control visibility of InstallPrompt
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null); // Store the beforeinstallprompt event
+  const [isIOS, setIsIOS] = useState(false); // Detect if the user is on iOS
 
   useEffect(() => {
-    // Listen for the beforeinstallprompt event
+    // Detect if the user is on iOS
+    const userAgent = window.navigator.userAgent;
+    setIsIOS(/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream);
+
+    // Listen for the beforeinstallprompt event (for Android and desktop)
     const handleBeforeInstallPrompt = (e: any) => {
       e.preventDefault(); // Prevent the default mini-infobar from appearing
       setDeferredPrompt(e); // Save the event for later use
@@ -174,10 +179,15 @@ export default function WellnessApp() {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
   }, []);
-
   const handleInstallClick = () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt(); // Show the install prompt
+    if (isIOS) {
+      // Show instructions for iOS users
+      alert(
+        'To install this app, tap the "Share" button in Safari and select "Add to Home Screen".'
+      );
+    } else if (deferredPrompt) {
+      // Show the install prompt for Android and desktop
+      deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult: any) => {
         if (choiceResult.outcome === 'accepted') {
           console.log('User accepted the install prompt');
@@ -190,6 +200,7 @@ export default function WellnessApp() {
       console.log('Install prompt is not available');
     }
   };
+
 
   return (
     <div className="min-h-screen max-w-md mx-auto p-4">
