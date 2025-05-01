@@ -1,103 +1,136 @@
-import Image from "next/image";
+'use client';
+import { useState, useEffect } from 'react';
+import { Goal, MeditationSession, Visualization } from '../types';
+import { NavigationTabs } from '../components/NavigationTabs';
+import { GoalTracker } from '../components/GoalTracker';
+import { MeditationTracker } from '../components/MeditationTracker';
+import { VisualizationTracker } from '../components/VisualizationTracker';
+import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
 
-export default function Home() {
+export default function WellnessApp() {
+  const [activeTab, setActiveTab] = useState<'goals' | 'meditate' | 'visualize' | 'analytics'>('goals');
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [sessions, setSessions] = useState<MeditationSession[]>([]);
+  const [visualizations, setVisualizations] = useState<Visualization[]>([]);
+  const [input, setInput] = useState('');
+  const deleteGoal = (id: string) => {
+    setGoals(goals.filter(goal => goal.id !== id));
+  };
+  const deleteVisualization = (id: string) => {
+    setVisualizations(visualizations.filter(viz => viz.id !== id));
+  };
+  
+
+  // Load all data
+  useEffect(() => {
+    const loadData = () => {
+      const savedGoals = localStorage.getItem('wellness-goals');
+      const savedSessions = localStorage.getItem('meditation-sessions');
+      const savedViz = localStorage.getItem('visualizations');
+
+      if (savedGoals) setGoals(JSON.parse(savedGoals));
+      if (savedSessions) setSessions(JSON.parse(savedSessions));
+      if (savedViz) setVisualizations(JSON.parse(savedViz));
+    };
+    loadData();
+  }, []);
+
+  // Save data
+  useEffect(() => {
+    localStorage.setItem('wellness-goals', JSON.stringify(goals));
+    localStorage.setItem('meditation-sessions', JSON.stringify(sessions));
+    localStorage.setItem('visualizations', JSON.stringify(visualizations));
+  }, [goals, sessions, visualizations]);
+
+  // Goal functions
+  const addGoal = () => {
+    if (!input.trim()) return;
+    setGoals([...goals, {
+      id: Date.now().toString(),
+      text: input,
+      completed: false,
+      date: new Date().toISOString().split('T')[0],
+      category: 'focus'
+    }]);
+    setInput('');
+  };
+
+  const toggleGoal = (id: string) => {
+    setGoals(goals.map(g => g.id === id ? { ...g, completed: !g.completed } : g));
+  };
+
+  // Meditation functions
+  const logMeditation = (minutes: number) => {
+    setSessions([...sessions, {
+      id: Date.now().toString(),
+      duration: minutes,
+      date: new Date().toISOString().split('T')[0]
+    }]);
+  };
+
+  // Visualization functions
+  const addVisualization = (desc: string) => {
+    setVisualizations([...visualizations, {
+      id: Date.now().toString(),
+      description: desc,
+      date: new Date().toISOString().split('T')[0]
+    }]);
+  };
+
+  // Analytics calculations
+  const completionRate = () => {
+    const todayGoals = goals.filter(g => g.date === new Date().toISOString().split('T')[0]);
+    return todayGoals.length
+      ? Math.round((todayGoals.filter(g => g.completed).length / todayGoals.length) * 100)
+      : 0;
+  };
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen max-w-md mx-auto p-4">
+      <header className="mb-6">
+        <h1 className="text-3xl font-bold">MindForge</h1>
+        <p className="text-muted-foreground">Holistic productivity system</p>
+      </header>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <NavigationTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+
+
+
+      {activeTab === 'goals' && (
+        <GoalTracker
+          goals={goals}
+          input={input}
+          setInput={setInput}
+          addGoal={addGoal}
+          toggleGoal={toggleGoal}
+          deleteGoal={deleteGoal}
+        />
+      )}
+
+      {activeTab === 'meditate' && (
+        <MeditationTracker
+          sessions={sessions}
+          logMeditation={logMeditation}
+        />
+      )}
+
+      {activeTab === 'visualize' && (
+        <VisualizationTracker
+          visualizations={visualizations}
+          input={input}
+          setInput={setInput}
+          addVisualization={addVisualization}
+          deleteVisualization={deleteVisualization} 
+        />
+      )}
+
+      {activeTab === 'analytics' && (
+        <AnalyticsDashboard
+          goals={goals}
+          sessions={sessions}
+          completionRate={completionRate}
+        />
+      )}
     </div>
   );
 }
