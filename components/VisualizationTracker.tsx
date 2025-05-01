@@ -82,9 +82,6 @@ export function VisualizationTracker({
                 >
                   <Trash2 size={16} />
                 </button>
-                <div className="text-xs text-muted-foreground mt-2">
-                  {new Date(viz.date).toLocaleTimeString()}
-                </div>
               </div>
             ))}
           </div>
