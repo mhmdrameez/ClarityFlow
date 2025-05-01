@@ -113,7 +113,6 @@ export default function WellnessApp() {
         </div>
         <button
           onClick={toggleDarkMode}
-          className='p-2 rounded bg-gray-200 dark:text-gray-800'
         >
           {darkMode ? '🌙' : '☀️'}
         </button>
