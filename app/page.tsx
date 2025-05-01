@@ -9,6 +9,7 @@ import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
 import { AffirmationsTracker } from '../components/AffirmationsTracker';
 import { GratitudeTracker } from '../components/GratitudeTracker';
 import { InstallPrompt } from '../components/InstallPrompt';
+import { Plus } from 'lucide-react';
 
 
 export default function WellnessApp() {
@@ -157,14 +158,39 @@ export default function WellnessApp() {
 
   const [showInstallPrompt, setShowInstallPrompt] = useState(false); // State to control visibility of InstallPrompt
 
-  useEffect(() => {
-    // Show InstallPrompt after 5 seconds
-    const timer = setTimeout(() => {
-      setShowInstallPrompt(true);
-    }, 5000);
 
-    return () => clearTimeout(timer); // Cleanup timeout on component unmount
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false); // State to control visibility of InstallPrompt
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null); // Store the beforeinstallprompt event
+
+  useEffect(() => {
+    // Listen for the beforeinstallprompt event
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault(); // Prevent the default mini-infobar from appearing
+      setDeferredPrompt(e); // Save the event for later use
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
   }, []);
+  
+  const handleInstallClick = () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt(); // Show the install prompt
+      deferredPrompt.userChoice.then((choiceResult: any) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        setDeferredPrompt(null); // Clear the saved prompt
+      });
+    } else {
+      console.log('Install prompt is not available');
+    }
+  };
 
   return (
     <div className="min-h-screen max-w-md mx-auto p-4">
@@ -175,6 +201,13 @@ export default function WellnessApp() {
           <h1 className="text-3xl font-bold">ClarityFlow</h1>
           <p className="text-muted-foreground">Stay focused. Grow daily. Live mindfully.</p>
         </div>
+        <button
+          onClick={handleInstallClick} // Trigger the install prompt
+          className="p-2 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors"
+          aria-label="Install App"
+        >
+          <Plus size={20} /> {/* "+" icon */}
+        </button>
         <button
           onClick={toggleDarkMode}
           className="p-2 rounded-full hover:bg-accent/10 transition-colors"
