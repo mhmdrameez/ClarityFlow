@@ -68,12 +68,14 @@ export function MeditationTracker({ sessions, logMeditation }: MeditationTracker
     speakInstruction('Breathe In');
   };
 
-  const toggleTimer = (paused: boolean) => {
-    setIsActive(paused);
-    if (!paused) {
-      speakInstruction(isBreathingIn ? 'Breathe In' : 'Breathe Out');
+  const toggleTimer = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // Toggle the isActive state when the button is clicked
+    setIsActive(prev => !prev);
+    
+    if (isActive) {
+      speechSynthesis.cancel(); // Stop speech when pausing
     } else {
-      speechSynthesis.cancel();
+      speakInstruction(isBreathingIn ? 'Breathe In' : 'Breathe Out');
     }
   };
 
@@ -145,12 +147,12 @@ export function MeditationTracker({ sessions, logMeditation }: MeditationTracker
 
             {/* Controls */}
             <div className="flex justify-center gap-4">
-              <button
-                onClick={toggleTimer}
-                className="p-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                {isActive ? <Pause size={20} /> : <Play size={20} />}
-              </button>
+            <button
+  onClick={toggleTimer} // No need to pass any arguments
+  className="p-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90"
+>
+  {isActive ? <Pause size={20} /> : <Play size={20} />}
+</button>
               <button
                 onClick={resetTimer}
                 className="p-3 rounded-full border hover:bg-accent/10"
