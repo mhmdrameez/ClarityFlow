@@ -8,6 +8,8 @@ import { VisualizationTracker } from '../components/VisualizationTracker';
 import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
 import { AffirmationsTracker } from '../components/AffirmationsTracker';
 import { GratitudeTracker } from '../components/GratitudeTracker';
+import { InstallPrompt } from '../components/InstallPrompt';
+
 
 export default function WellnessApp() {
   const [activeTab, setActiveTab] = useState<'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude'>('goals');
@@ -228,6 +230,9 @@ export default function WellnessApp() {
           completionRate={completionRate}
         />
       )}
+
+<InstallPrompt />
+      
 
 <footer className="mt-8 py-4 text-center text-sm text-muted-foreground border-t">
 <p>
