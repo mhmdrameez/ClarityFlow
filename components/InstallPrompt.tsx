@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Info } from 'lucide-react'; // Assuming you're using lucide-react for icons
 
 export function InstallPrompt() {
   const [isIOS, setIsIOS] = useState(false);
@@ -24,7 +25,11 @@ export function InstallPrompt() {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      setIsVisible(true);
+
+      // Show the prompt after a 5-second delay
+      setTimeout(() => {
+        setIsVisible(true);
+      }, 5000);
     });
 
     return () => {
@@ -33,7 +38,11 @@ export function InstallPrompt() {
   }, []);
 
   const handleInstallClick = () => {
-    if (deferredPrompt) {
+    if (isIOS) {
+      alert(
+        'To install the app, tap the "Share" button in Safari and select "Add to Home Screen".'
+      );
+    } else if (deferredPrompt) {
       deferredPrompt.prompt();
       deferredPrompt.userChoice.then((choiceResult: any) => {
         if (choiceResult.outcome === 'accepted') {
@@ -50,32 +59,14 @@ export function InstallPrompt() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 max-w-md mx-auto">
-      <div className="flex justify-between items-center">
-        <div>
-          <h3 className="font-medium text-gray-900 dark:text-white">
-            Install ClarityLife
-          </h3>
-          {isIOS ? (
-            <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-              Tap <span className="font-bold">Share</span> then{' '}
-              <span className="font-bold">Add to Home Screen</span>
-            </p>
-          ) : (
-            <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-              Get the full app experience
-            </p>
-          )}
-        </div>
-        {!isIOS && (
-          <button
-            onClick={handleInstallClick}
-            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-          >
-            Install
-          </button>
-        )}
-      </div>
+    <div className="fixed bottom-4 right-4 z-50">
+      <button
+        onClick={handleInstallClick}
+        className="p-3 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors"
+        aria-label="Install App"
+      >
+        <Info size={20} />
+      </button>
     </div>
   );
 }

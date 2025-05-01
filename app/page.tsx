@@ -157,6 +157,8 @@ export default function WellnessApp() {
 
   return (
     <div className="min-h-screen max-w-md mx-auto p-4">
+
+<InstallPrompt />
       <header className="mb-6 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">ClarityFlow</h1>
@@ -231,7 +233,6 @@ export default function WellnessApp() {
         />
       )}
 
-<InstallPrompt />
       
 
 <footer className="mt-8 py-4 text-center text-sm text-muted-foreground border-t">
