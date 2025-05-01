@@ -155,11 +155,22 @@ export default function WellnessApp() {
     document.documentElement.classList.toggle('dark', newDarkMode);
   };
 
+  const [showInstallPrompt, setShowInstallPrompt] = useState(false); // State to control visibility of InstallPrompt
+
+  useEffect(() => {
+    // Show InstallPrompt after 5 seconds
+    const timer = setTimeout(() => {
+      setShowInstallPrompt(true);
+    }, 5000);
+
+    return () => clearTimeout(timer); // Cleanup timeout on component unmount
+  }, []);
+
   return (
     <div className="min-h-screen max-w-md mx-auto p-4">
 
-<InstallPrompt />
-      <header className="mb-6 flex justify-between items-center">
+{showInstallPrompt && <InstallPrompt />} {/* Show InstallPrompt after 5 seconds */}
+<header className="mb-6 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">ClarityFlow</h1>
           <p className="text-muted-foreground">Stay focused. Grow daily. Live mindfully.</p>
