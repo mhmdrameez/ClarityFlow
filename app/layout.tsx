@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FocusForge | Build Discipline",
+  title: "ClarityLife | Build Discipline",
   description: "Daily goal tracker for focus and consistency",
   manifest: "/manifest.json", // PWA manifest
   themeColor: "#000000",
