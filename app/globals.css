@@ -17,10 +17,10 @@ body {
 }
 
 .overflow-x-auto::-webkit-scrollbar {
-  display: none; /* Hides the scrollbar in WebKit browsers */
+  display: none; 
 }
 
 .overflow-x-auto {
-  -ms-overflow-style: none; /* Hides the scrollbar in IE and Edge */
-  scrollbar-width: none; /* Hides the scrollbar in Firefox */
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
 }
