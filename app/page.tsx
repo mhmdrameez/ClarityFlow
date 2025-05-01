@@ -158,11 +158,17 @@ export default function WellnessApp() {
 
 
 
-  const [showInstallPrompt, setShowInstallPrompt] = useState(false); // State to control visibility of InstallPrompt
+  const [isStandalone, setIsStandalone] = useState(false); // Detect if the app is installed
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null); // Store the beforeinstallprompt event
   const [isIOS, setIsIOS] = useState(false); // Detect if the user is on iOS
 
   useEffect(() => {
+    // Detect if the app is running in standalone mode
+    setIsStandalone(
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone
+    );
+
     // Detect if the user is on iOS
     const userAgent = window.navigator.userAgent;
     setIsIOS(/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream);
@@ -179,6 +185,7 @@ export default function WellnessApp() {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
   }, []);
+
   const handleInstallClick = () => {
     if (isIOS) {
       // Show instructions for iOS users
@@ -205,8 +212,15 @@ export default function WellnessApp() {
   return (
     <div className="min-h-screen max-w-md mx-auto p-4">
 
-{showInstallPrompt && <InstallPrompt />} {/* Show InstallPrompt after 5 seconds */}
-<header className="mb-6 flex justify-between items-center">
+{!isStandalone && ( 
+          <button
+            onClick={handleInstallClick} 
+            className="p-2 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors"
+            aria-label="Install App"
+          >
+            <Plus size={20} /> 
+          </button>
+        )}<header className="mb-6 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">ClarityFlow</h1>
           <p className="text-muted-foreground">Stay focused. Grow daily. Live mindfully.</p>
