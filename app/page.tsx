@@ -19,7 +19,10 @@ export default function WellnessApp() {
   const deleteVisualization = (id: string) => {
     setVisualizations(visualizations.filter(viz => viz.id !== id));
   };
-  
+
+  const deleteSession = (id: string) => {
+    setSessions(sessions.filter(session => session.id !== id));
+  };
 
   // Load all data
   useEffect(() => {
@@ -111,6 +114,7 @@ export default function WellnessApp() {
         <MeditationTracker
           sessions={sessions}
           logMeditation={logMeditation}
+          deleteSession={deleteSession}
         />
       )}
 

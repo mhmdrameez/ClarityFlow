@@ -72,7 +72,7 @@ export function GoalTracker({
               
               <button
                 onClick={() => deleteGoal(goal.id)}
-                className="p-1 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:text-destructive"
+                className="text-red-500 text-sm hover:underline"
                 aria-label="Delete goal"
               >
                 <Trash size={16} />

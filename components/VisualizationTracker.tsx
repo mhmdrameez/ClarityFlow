@@ -77,7 +77,7 @@ export function VisualizationTracker({
                 <p className="whitespace-pre-line">{viz.description}</p>
                 <button
                   onClick={() => deleteVisualization(viz.id)}
-                  className="absolute top-2 right-2 p-1 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity hover:text-destructive"
+                  className="absolute top-2 right-2 p-1 text-red-500   "
                   aria-label="Delete visualization"
                 >
                   <Trash2 size={16} />
