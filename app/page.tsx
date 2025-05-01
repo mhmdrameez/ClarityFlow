@@ -13,6 +13,7 @@ export default function WellnessApp() {
   const [sessions, setSessions] = useState<MeditationSession[]>([]);
   const [visualizations, setVisualizations] = useState<Visualization[]>([]);
   const [input, setInput] = useState('');
+  const [darkMode, setDarkMode] = useState<boolean>(false);
   const deleteGoal = (id: string) => {
     setGoals(goals.filter(goal => goal.id !== id));
   };
@@ -36,6 +37,14 @@ export default function WellnessApp() {
       if (savedViz) setVisualizations(JSON.parse(savedViz));
     };
     loadData();
+  }, []);
+
+  useEffect(() => {
+    const savedDarkMode = localStorage.getItem('dark-mode');
+    if (savedDarkMode) {
+      setDarkMode(savedDarkMode === 'true');
+      document.documentElement.classList.toggle('dark', savedDarkMode === 'true');
+    }
   }, []);
 
   // Save data
@@ -88,11 +97,26 @@ export default function WellnessApp() {
       : 0;
   };
 
+  const toggleDarkMode = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+    localStorage.setItem('dark-mode', newDarkMode.toString());
+    document.documentElement.classList.toggle('dark', newDarkMode);
+  };
+
   return (
     <div className="min-h-screen max-w-md mx-auto p-4">
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold">MindForge</h1>
-        <p className="text-muted-foreground">Holistic productivity system</p>
+      <header className="mb-6 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold">MindForge</h1>
+          <p className="text-muted-foreground">Holistic productivity system</p>
+        </div>
+        <button
+          onClick={toggleDarkMode}
+          className='p-2 rounded bg-gray-200 dark:text-gray-800'
+        >
+          {darkMode ? '🌙' : '☀️'}
+        </button>
       </header>
 
       <NavigationTabs activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -124,7 +148,7 @@ export default function WellnessApp() {
           input={input}
           setInput={setInput}
           addVisualization={addVisualization}
-          deleteVisualization={deleteVisualization} 
+          deleteVisualization={deleteVisualization}
         />
       )}
 
