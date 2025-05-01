@@ -156,7 +156,6 @@ export default function WellnessApp() {
     document.documentElement.classList.toggle('dark', newDarkMode);
   };
 
-  const [showInstallPrompt, setShowInstallPrompt] = useState(false); // State to control visibility of InstallPrompt
 
 
   const [showInstallPrompt, setShowInstallPrompt] = useState(false); // State to control visibility of InstallPrompt
@@ -175,7 +174,7 @@ export default function WellnessApp() {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
   }, []);
-  
+
   const handleInstallClick = () => {
     if (deferredPrompt) {
       deferredPrompt.prompt(); // Show the install prompt
