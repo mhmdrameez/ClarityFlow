@@ -301,7 +301,7 @@ export default function WellnessApp() {
 <p>
 Vibe coded ✨ by{" "}
 <a
-    href="https://mhmdrameezweb.netlify.app/"
+    href=""
     target="_blank"
     rel="noopener noreferrer"
     className="text-blue-500 hover:underline ml-1"
