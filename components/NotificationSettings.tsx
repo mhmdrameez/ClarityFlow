@@ -44,6 +44,31 @@ export function NotificationSettings() {
     isha: '20:00'
   });
 
+  const [showTestNotification, setShowTestNotification] = useState(false);
+
+  // Add function to send test notification
+  const sendTestNotification = async () => {
+    if ('serviceWorker' in navigator && 'Notification' in window) {
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission === 'granted') {
+          const registration = await navigator.serviceWorker.ready;
+          await registration.showNotification('Test Notification', {
+            body: 'This is a test notification to verify your settings.',
+            icon: '/icons/mosque-icon.png',
+            badge: '/icons/badge-72x72.png',
+            tag: 'test-notification'
+          });
+        } else {
+          alert('Notification permission denied. Please enable notifications in your browser settings.');
+        }
+      } catch (error) {
+        console.error('Error sending test notification:', error);
+        alert('Failed to send test notification. Please check your browser settings.');
+      }
+    }
+  };
+
   // Load all settings from localStorage
   useEffect(() => {
     setIsClient(true);
@@ -250,6 +275,25 @@ export function NotificationSettings() {
             )}
           </div>
         </div>
+
+        <div className="mt-4 flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <span>Test Notifications</span>
+                <CustomSwitch
+                  checked={showTestNotification}
+                  onChange={setShowTestNotification}
+                />
+              </div>
+              
+              {showTestNotification && (
+                <button
+                  onClick={sendTestNotification}
+                  className="w-full p-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+                >
+                  Send Test Notification
+                </button>
+              )}
+            </div>
         
         <button
           onClick={() => {
