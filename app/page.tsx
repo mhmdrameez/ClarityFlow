@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Goal, MeditationSession, Visualization, Affirmation, GratitudeEntry } from '../types';
+import { Goal, MeditationSession, Visualization, Affirmation, GratitudeEntry, Prayer } from '../types';
 import { NavigationTabs } from '../components/NavigationTabs';
 import { GoalTracker } from '../components/GoalTracker';
 import { MeditationTracker } from '../components/MeditationTracker';
@@ -10,10 +10,13 @@ import { AffirmationsTracker } from '../components/AffirmationsTracker';
 import { GratitudeTracker } from '../components/GratitudeTracker';
 import { InstallPrompt } from '../components/InstallPrompt';
 import { Plus } from 'lucide-react';
+import { NotificationSettings } from '../components/NotificationSettings';
+import { PrayerTracker } from '@/components/PrayerTracker';
+
 
 
 export default function WellnessApp() {
-  const [activeTab, setActiveTab] = useState<'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude'>('goals');
+  const [activeTab, setActiveTab] = useState<'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude' | 'settings' | 'prayer'>('goals');
   const [goals, setGoals] = useState<Goal[]>([]);
   const [sessions, setSessions] = useState<MeditationSession[]>([]);
   const [visualizations, setVisualizations] = useState<Visualization[]>([]);
@@ -22,15 +25,136 @@ export default function WellnessApp() {
   const [input, setInput] = useState('');
   const [darkMode, setDarkMode] = useState<boolean>(false);
 
-  // Load all data
+  // Add to your state
+const [prayers, setPrayers] = useState<Prayer[]>([]);
+
+
+
+// Prayer state changes will be handled by the main useEffect that saves data to localStorage
+
+// Add these prayer functions
+const togglePrayer = (id: string) => {
+  setPrayers(prayers.map(p => 
+    p.id === id ? { ...p, completed: !p.completed } : p
+  ));
+};
+
+const addPrayerTime = (name: string, time: string) => {
+  const today = new Date().toISOString().split('T')[0];
+  const existingPrayer = prayers.find(p => 
+    p.date === today && p.name === name
+  );
+
+  if (existingPrayer) {
+    setPrayers(prayers.map(p =>
+      p.id === existingPrayer.id ? { ...p, time } : p
+    ));
+  } else {
+    setPrayers([...prayers, {
+      id: Date.now().toString(),
+      name: name as any,
+      completed: false,
+      date: today,
+      time
+    }]);
+  }
+};
+
+
+
+  
+
+  // Add this to your WellnessApp component
   useEffect(() => {
-    const loadData = () => {
+    const requestNotificationPermission = async () => {
+      if ('Notification' in window && 'serviceWorker' in navigator) {
+        try {
+          const permission = await Notification.requestPermission();
+          if (permission === 'granted') {
+            console.log('Notification permission granted');
+            
+            // Schedule notifications after permission is granted
+            await scheduleDailyNotifications();
+            
+            // Register periodic sync (if supported)
+            if ('periodicSync' in (navigator as any)) {
+              try {
+                await (navigator as any).periodicSync.register('daily-reminders', {
+                  minInterval: 24 * 60 * 60 * 1000 // 1 day
+                });
+                console.log('Periodic sync registered');
+              } catch (err) {
+                console.log('Periodic sync could not be registered', err);
+              }
+            }
+          }
+        } catch (err) {
+          console.error('Notification permission error:', err);
+        }
+      }
+    };
+
+    requestNotificationPermission();
+  }, []); // Empty dependency array means this runs once on mount
+
+  // Move scheduleDailyNotifications inside the component but outside of any effects
+  const scheduleDailyNotifications = async () => {
+    if ('serviceWorker' in navigator && 'Notification' in window) {
+      const registration = await navigator.serviceWorker.ready;
+      
+      // Get current time in IST
+      const now = new Date();
+      const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
+      const istTime = new Date(now.getTime() + istOffset);
+      
+      // Schedule morning notification at 8 AM IST
+      const morningTime = new Date(istTime);
+      morningTime.setHours(8, 0, 0, 0);
+      if (morningTime < istTime) {
+        morningTime.setDate(morningTime.getDate() + 1);
+      }
+      const morningDelay = morningTime.getTime() - istTime.getTime();
+      
+      setTimeout(() => {
+        registration.showNotification('Morning Reminder', {
+          body: '🌞 Start your day with positive visualizations!',
+          icon: '/icons/icon-192x192.png',
+          badge: '/icons/badge-72x72.png'
+        });
+      }, morningDelay);
+      
+      // Schedule evening notification at 8 PM IST
+      const eveningTime = new Date(istTime);
+      eveningTime.setHours(20, 0, 0, 0);
+      if (eveningTime < istTime) {
+        eveningTime.setDate(eveningTime.getDate() + 1);
+      }
+      const eveningDelay = eveningTime.getTime() - istTime.getTime();
+      
+      setTimeout(() => {
+        registration.showNotification('Evening Reminder', {
+          body: '🌙 Reflect on your visualizations before bed',
+          icon: '/icons/icon-192x192.png',
+          badge: '/icons/badge-72x72.png'
+        });
+      }, eveningDelay);
+    }
+  };
+
+// Call this after getting notification permission
+// You might want to put this in the permission granted callback
+scheduleDailyNotifications();
+
+  // Load data from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') { // Ensure this runs only on the client
       const savedGoals = localStorage.getItem('wellness-goals');
       const savedSessions = localStorage.getItem('meditation-sessions');
       const savedViz = localStorage.getItem('visualizations');
       const savedAffirmations = localStorage.getItem('affirmations');
       const savedGratitude = localStorage.getItem('gratitude-entries');
       const savedDarkMode = localStorage.getItem('dark-mode');
+      const savedPrayers = localStorage.getItem('prayers');
 
       if (savedGoals) setGoals(JSON.parse(savedGoals));
       if (savedSessions) setSessions(JSON.parse(savedSessions));
@@ -41,19 +165,23 @@ export default function WellnessApp() {
         setDarkMode(savedDarkMode === 'true');
         document.documentElement.classList.toggle('dark', savedDarkMode === 'true');
       }
-    };
-    loadData();
+      if (savedPrayers) setPrayers(JSON.parse(savedPrayers));
+    }
   }, []);
 
-  // Save data
+  // Save data to localStorage
   useEffect(() => {
-    localStorage.setItem('wellness-goals', JSON.stringify(goals));
-    localStorage.setItem('meditation-sessions', JSON.stringify(sessions));
-    localStorage.setItem('visualizations', JSON.stringify(visualizations));
-    localStorage.setItem('affirmations', JSON.stringify(affirmations));
-    localStorage.setItem('gratitude-entries', JSON.stringify(gratitudeEntries));
-    localStorage.setItem('dark-mode', darkMode.toString());
-  }, [goals, sessions, visualizations, affirmations, gratitudeEntries, darkMode]);
+    if (typeof window !== 'undefined') { // Ensure this runs only on the client
+      localStorage.setItem('wellness-goals', JSON.stringify(goals));
+      localStorage.setItem('meditation-sessions', JSON.stringify(sessions));
+      localStorage.setItem('visualizations', JSON.stringify(visualizations));
+      localStorage.setItem('affirmations', JSON.stringify(affirmations));
+      localStorage.setItem('gratitude-entries', JSON.stringify(gratitudeEntries));
+      localStorage.setItem('dark-mode', darkMode.toString());
+      localStorage.setItem('prayers', JSON.stringify(prayers));
+    }
+  }, [goals, sessions, visualizations, affirmations, gratitudeEntries, darkMode, prayers]);
+
 
   // Delete functions
   const deleteGoal = (id: string) => {
@@ -102,14 +230,19 @@ export default function WellnessApp() {
     }]);
   };
 
-  // Visualization functions
-  const addVisualization = (desc: string) => {
-    setVisualizations([...visualizations, {
-      id: Date.now().toString(),
-      description: desc,
-      date: new Date().toISOString().split('T')[0]
-    }]);
+// In your WellnessApp component, update the addVisualization function:
+// In your WellnessApp component
+const addVisualization = (desc: string, timeframe?: string) => {
+  const newVisualization: Visualization = {
+    id: Date.now().toString(),
+    description: desc,
+    date: new Date().toISOString().split('T')[0],
+    timeframe: timeframe || undefined
   };
+  setVisualizations([...visualizations, newVisualization]);
+};
+
+
 
   // Affirmation functions
   const addAffirmation = (text: string) => {
@@ -277,6 +410,14 @@ export default function WellnessApp() {
         />
       )}
 
+{activeTab === 'prayer' && (
+  <PrayerTracker
+    prayers={prayers}
+    togglePrayer={togglePrayer}
+    addPrayerTime={addPrayerTime}
+  />
+)}
+
       {activeTab === 'gratitude' && (
         <GratitudeTracker
           entries={gratitudeEntries}
@@ -295,13 +436,17 @@ export default function WellnessApp() {
         />
       )}
 
+{activeTab === 'settings' && (
+  <NotificationSettings />
+)}
+
       
 
 <footer className="mt-8 py-4 text-center text-sm text-muted-foreground border-t">
 <p>
 Vibe coded ✨ by{" "}
 <a
-    href="https://mhmdrameezweb.netlify.app/"
+    href=""
     target="_blank"
     rel="noopener noreferrer"
     className="text-blue-500 hover:underline ml-1"

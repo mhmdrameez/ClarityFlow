@@ -33,5 +33,13 @@
       "sizes": "180x180",
       "type": "image/png"
     }
-  ]
+  ],
+  "gcm_sender_id": "103953800507", 
+  "notification": {
+    "icons": {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192"
+    },
+    "badge": "/icons/badge-72x72.png"
+  }
 }

@@ -1,14 +1,27 @@
-import { Check, Activity, Eye, BarChart2, MessageCircle, Heart } from 'lucide-react';
+import { Check, Activity, Eye, BarChart2, MessageCircle, Heart, Settings, Building2 } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 interface NavigationTabsProps {
   activeTab: string;
-  setActiveTab: (tab: 'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude') => void;
+  setActiveTab: (tab: 'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude' | 'settings' | 'prayer') => void;
 }
 
 export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps) {
+
+  const [showPrayerTab, setShowPrayerTab] = useState(true);
+
+  // Load prayer tab setting from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const storedValue = localStorage.getItem('showPrayerTab');
+      setShowPrayerTab(storedValue !== 'false');
+    }
+  }, []);
+
+
   return (
     <div className="overflow-x-auto">
-      <nav className="flex gap-3 mb-6 w-[400px]">
+      <nav className="flex gap-3 mb-6 w-[450px]"> {/* Increased width to accommodate new tab */}
         <button 
           onClick={() => setActiveTab('goals')}
           className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'goals' ? 'bg-accent' : ''}`}
@@ -37,6 +50,13 @@ export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps)
           <MessageCircle size={20} />
           <span className="text-xs mt-1">Affirmations</span>
         </button>
+<button 
+  onClick={() => setActiveTab('prayer')}
+  className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'prayer' ? 'bg-accent' : ''}`}
+>
+  <Building2 size={20} />
+  <span className="text-xs mt-1">Prayer</span>
+</button>
         <button 
           onClick={() => setActiveTab('gratitude')}
           className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'gratitude' ? 'bg-accent' : ''}`}
@@ -50,6 +70,13 @@ export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps)
         >
           <BarChart2 size={20} />
           <span className="text-xs mt-1">Stats</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab('settings')}
+          className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'settings' ? 'bg-accent' : ''}`}
+        >
+          <Settings size={20} />
+          <span className="text-xs mt-1">Settings</span>
         </button>
       </nav>
     </div>

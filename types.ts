@@ -12,11 +12,13 @@ export type Goal = {
     date: string;
   };
   
-  export type Visualization = {
+  export interface Visualization {
     id: string;
     description: string;
     date: string;
-  };
+    timeframe?: string;  // Add this line
+  }
+
 
   export type Affirmation = {
     id: string;
@@ -32,3 +34,11 @@ export type Goal = {
     date: string;
     category: 'general' | 'people' | 'health' | 'opportunities';
   };
+
+  export interface Prayer {
+    id: string;
+    name: 'Fajr' | 'Dhuhr' | 'Asr' | 'Maghrib' | 'Isha';
+    completed: boolean;
+    date: string; // YYYY-MM-DD format
+    time?: string; // Actual prayer time
+  }
