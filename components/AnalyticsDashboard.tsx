@@ -69,16 +69,15 @@ export function AnalyticsDashboard({ goals, sessions, completionRate }: Analytic
   };
 
   const currentStreak = calculateStreak();
-
-  // Helper function to get current week days in correct order
+// Updated helper function to match image layout (Monday first, Sunday last)
 function getCurrentWeekDays() {
   const days = [];
   const today = new Date();
   const dayOfWeek = today.getDay(); // 0 (Sunday) to 6 (Saturday)
   
-  // Start from Sunday of current week
+  // Start from Monday of current week
   const startDate = new Date(today);
-  startDate.setDate(today.getDate() - dayOfWeek);
+  startDate.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
   
   for (let i = 0; i < 7; i++) {
     const date = new Date(startDate);
@@ -86,12 +85,13 @@ function getCurrentWeekDays() {
     
     days.push({
       date: date.toISOString().split('T')[0],
-      dayShort: date.toLocaleDateString('en', { weekday: 'short' })
+      dayShort: date.toLocaleDateString('en', { weekday: 'short' }).charAt(0)
     });
   }
   
   return days;
 }
+
 
 
   return (
@@ -142,6 +142,7 @@ function getCurrentWeekDays() {
 
       {/* Progress Charts */}
       <div className="space-y-4">
+      <div className="space-y-4">
   <div>
     <div className="flex items-center justify-between mb-2">
       <div className="flex items-center gap-2">
@@ -180,6 +181,47 @@ function getCurrentWeekDays() {
       </div>
     </div>
   </div>
+
+  <div>
+    <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center gap-2">
+        <Clock size={16} className="text-primary" />
+        <span className="font-medium">Meditation This Week</span>
+      </div>
+      <span className="text-sm text-muted-foreground">
+        {weeklyGoals.reduce((acc, day) => acc + day.meditation, 0)} min
+      </span>
+    </div>
+    <div className="h-40 bg-accent/5 rounded-lg p-2">
+      <div className="flex h-full gap-1">
+        {getCurrentWeekDays().map(({date, dayShort}, i) => {
+          const dayMeditation = sessions
+            .filter(s => s.date === date)
+            .reduce((acc, curr) => acc + curr.duration, 0);
+          const maxMeditation = Math.max(...weeklyGoals.map(d => d.meditation), 10);
+          const heightPercent = (dayMeditation / maxMeditation) * 100;
+          
+          return (
+            <div key={i} className="flex-1 flex flex-col justify-end items-center">
+              <div 
+                className="bg-blue-500 rounded-t-sm relative w-full hover:bg-blue-600 transition-colors"
+                style={{ height: `${heightPercent}%` }}
+              >
+                <span className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-[10px]">
+                  {dayShort}
+                </span>
+                <span className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs">
+                  {dayMeditation || '0'}m
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</div>
+
 
   <div>
     <div className="flex items-center justify-between mb-2">
