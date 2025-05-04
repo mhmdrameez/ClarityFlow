@@ -410,13 +410,6 @@ const addVisualization = (desc: string, timeframe?: string) => {
         />
       )}
 
-{activeTab === 'prayer' && (
-  <PrayerTracker
-    prayers={prayers}
-    togglePrayer={togglePrayer}
-    addPrayerTime={addPrayerTime}
-  />
-)}
 
       {activeTab === 'gratitude' && (
         <GratitudeTracker
@@ -427,6 +420,15 @@ const addVisualization = (desc: string, timeframe?: string) => {
           deleteEntry={deleteGratitudeEntry}
         />
       )}
+
+{activeTab === 'prayer' && (
+  <PrayerTracker
+    prayers={prayers}
+    togglePrayer={togglePrayer}
+    addPrayerTime={addPrayerTime}
+  />
+)}
+
 
       {activeTab === 'analytics' && (
         <AnalyticsDashboard
