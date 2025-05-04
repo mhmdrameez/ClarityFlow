@@ -140,11 +140,11 @@ export function AnalyticsDashboard({ goals, sessions, completionRate }: Analytic
                 return (
                   <div key={i} className="flex-1 flex flex-col justify-end">
                     <div 
-                      className="bg-primary rounded-t-sm relative"
+                      className="bg-primary rounded-t-sm relative w-full min-w-[20px]"
                       style={{ height: `${completionPercent}%` }}
                     >
-                      <span className="absolute -top-5 left-1/2 transform -translate-x-1/2 text-xs">
-                        {new Date(date).toLocaleDateString('en', { weekday: 'short' }).charAt(0)}
+                      <span className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-[10px] whitespace-nowrap">
+                        {new Date(date).toLocaleDateString('en', { weekday: 'short' })}
                       </span>
                     </div>
                   </div>
