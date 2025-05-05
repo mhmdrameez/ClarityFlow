@@ -30,8 +30,7 @@
 - **ORM**: [Prisma](https://www.prisma.io/) (with PostgreSQL) (Future)
 - **PWA Support**: [next-pwa](https://github.com/shadowwalker/next-pwa) plugin
 - **Hosting**:
-  - [Vercel](https://vercel.com/) – Optimized for Next.js frontend 
-  - [Render](https://render.com/) – Backend/API and PostgreSQL hosting(Future)
+  - [Vercel](https://vercel.com/) –  Full-stack hosting (Frontend, API, and PostgreSQL via external managed DB)
 ---
 
 ## 🚀 Getting Started
