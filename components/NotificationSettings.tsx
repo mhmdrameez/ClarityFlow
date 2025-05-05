@@ -69,6 +69,15 @@ export function NotificationSettings() {
     }
   };
 
+  const togglePrayerTab = () => {
+    const newValue = !showPrayerTab;
+    setShowPrayerTab(newValue);
+    saveToLocalStorage('showPrayerTab', String(newValue));
+    
+    // Dispatch custom event to notify NavigationTabs
+    window.dispatchEvent(new Event('prayerTabChange'));
+  };
+
   // Load all settings from localStorage
   useEffect(() => {
     setIsClient(true);
@@ -122,11 +131,6 @@ export function NotificationSettings() {
     }
   };
 
-  const togglePrayerTab = () => {
-    const newValue = !showPrayerTab;
-    setShowPrayerTab(newValue);
-    saveToLocalStorage('showPrayerTab', String(newValue));
-  };
 
   const togglePrayerReminders = () => {
     const newValue = !prayerReminders;

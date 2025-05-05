@@ -7,21 +7,40 @@ interface NavigationTabsProps {
 }
 
 export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps) {
-
   const [showPrayerTab, setShowPrayerTab] = useState(true);
 
   // Load prayer tab setting from localStorage
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedValue = localStorage.getItem('showPrayerTab');
-      setShowPrayerTab(storedValue !== 'false');
-    }
-  }, []);
+    const handleStorageChange = () => {
+      if (typeof window !== 'undefined') {
+        const storedValue = localStorage.getItem('showPrayerTab');
+        setShowPrayerTab(storedValue !== 'false');
+        
+        // If prayer tab is hidden and it's currently active, switch to goals
+        if (storedValue === 'false' && activeTab === 'prayer') {
+          setActiveTab('goals');
+        }
+      }
+    };
 
+    // Initial load
+    handleStorageChange();
+
+    // Listen for changes in localStorage
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Custom event listener for direct updates
+    window.addEventListener('prayerTabChange', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('prayerTabChange', handleStorageChange);
+    };
+  }, [activeTab, setActiveTab]);
 
   return (
     <div className="overflow-x-auto">
-      <nav className="flex gap-3 mb-6 w-[450px]"> {/* Increased width to accommodate new tab */}
+      <nav className="flex gap-3 mb-6 w-[450px]">
         <button 
           onClick={() => setActiveTab('goals')}
           className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'goals' ? 'bg-accent' : ''}`}
@@ -50,13 +69,15 @@ export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps)
           <MessageCircle size={20} />
           <span className="text-xs mt-1">Affirmations</span>
         </button>
-<button 
-  onClick={() => setActiveTab('prayer')}
-  className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'prayer' ? 'bg-accent' : ''}`}
->
-  <Building2 size={20} />
-  <span className="text-xs mt-1">Prayer</span>
-</button>
+        {showPrayerTab && (
+          <button 
+            onClick={() => setActiveTab('prayer')}
+            className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'prayer' ? 'bg-accent' : ''}`}
+          >
+            <Building2 size={20} />
+            <span className="text-xs mt-1">Prayer</span>
+          </button>
+        )}
         <button 
           onClick={() => setActiveTab('gratitude')}
           className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'gratitude' ? 'bg-accent' : ''}`}
