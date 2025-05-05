@@ -223,44 +223,7 @@ function getCurrentWeekDays() {
 </div>
 
 
-  <div>
-    <div className="flex items-center justify-between mb-2">
-      <div className="flex items-center gap-2">
-        <Clock size={16} className="text-primary" />
-        <span className="font-medium">Meditation This Week</span>
-      </div>
-      <span className="text-sm text-muted-foreground">
-        {weeklyGoals.reduce((acc, day) => acc + day.meditation, 0)} min
-      </span>
-    </div>
-    <div className="h-40 bg-accent/5 rounded-lg p-2">
-      <div className="flex h-full gap-1">
-        {getCurrentWeekDays().map(({date, dayShort}, i) => {
-          const dayMeditation = sessions
-            .filter(s => s.date === date)
-            .reduce((acc, curr) => acc + curr.duration, 0);
-          const maxMeditation = Math.max(...weeklyGoals.map(d => d.meditation), 10);
-          const heightPercent = (dayMeditation / maxMeditation) * 100;
-          
-          return (
-            <div key={i} className="flex-1 flex flex-col justify-end items-center">
-              <div 
-                className="bg-blue-500 rounded-t-sm relative w-full hover:bg-blue-600 transition-colors"
-                style={{ height: `${heightPercent}%` }}
-              >
-                <span className="absolute -top-6 left-1/2 transform -translate-x-1/2 text-[10px]">
-                  {dayShort}
-                </span>
-                <span className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs">
-                  {dayMeditation || '0'}m
-                </span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  </div>
+
 </div>
 
 
