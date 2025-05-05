@@ -8,14 +8,14 @@
 
 ## ✨ Features
 
-- 🕌 **Islamic Prayer Tracker** – Log and monitor daily prayers
-- 🔢 **Dhikr Counter** – Manual and automatic tasbih (remembrance) tool
 - 🧘‍♂️ **Meditation Journal** – Reflect on your meditation sessions
 - 🙏 **Gratitude Practice** – Cultivate a positive mindset daily
 - 📊 **Personal Analytics** – Insights on spiritual and mindful growth
 - ⏰ **Spiritual Reminders** – Custom alerts to stay consistent
+- 🕌 **Islamic Prayer Tracker** – Log and monitor daily prayers
+- 🔢 **Dhikr Counter** – Manual and automatic tasbih (remembrance) tool
 - 🔒 **Firebase Authentication** – Email/password signup and login _(coming soon)_
-- 🌐 **Universal Support** – All religious and secular mindfulness practices supported
+- 🌐 **Universal Support** – All religious and secular mindfulness practices supported_(coming soon)_
 - 📱 **PWA Support** – Use ClarityFlow like a native mobile app
 
 ---
