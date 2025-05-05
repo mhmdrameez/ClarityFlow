@@ -453,7 +453,7 @@ const addVisualization = (desc: string, timeframe?: string) => {
     
     <div className="flex justify-center space-x-4">
       <a 
-        href="https://github.com/mrramdev/clarityflow"
+        href="https://github.com/mhmdrameez/ClarityFlow"
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 text-blue-500 hover:text-blue-600 transition-colors"
