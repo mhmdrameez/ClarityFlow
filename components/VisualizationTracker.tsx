@@ -58,12 +58,7 @@ export function VisualizationTracker({
         Visualization Journal
       </h2>
       
-      {/* Current Indian Time */}
-      <div className="flex items-center gap-2 bg-accent/10 p-3 rounded-lg">
-        <Clock size={18} className="text-primary" />
-        <span className="font-medium">Indian Standard Time (IST):</span>
-        <span className="ml-auto font-mono">{currentTime}</span>
-      </div>
+      
       
       {/* Input Section */}
       <div className="space-y-2">
