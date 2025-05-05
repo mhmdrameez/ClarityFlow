@@ -1,6 +1,6 @@
 # ClarityFlow - Mindful Living Companion 🌿
 
-![ClarityFlow Banner]([https://via.placeholder.com/1200x400?text=ClarityFlow+Banner](https://mail.google.com/mail/u/0?ui=2&ik=2d17d9c003&attid=0.1&permmsgid=msg-f:1831250611712150508&th=1969e8ba9dd1cbec&view=fimg&fur=ip&permmsgid=msg-f:1831250611712150508&sz=s0-l75-ft&attbid=ANGjdJ_4aEqMXE-incL35pISifZLWlyU8T8mIgp5Dt94XCKwGDku4qDI4MS4QLqQz35uy0mwZ_OjoKZHtCb0O-4fQy40wIE60xc2PB9hIvdqyRlAaSMvJfBpwhn6fG0&disp=emb&realattid=9F5715A2-D520-490F-A938-AA5AF7059D10&zw)
+![ClarityFlow Banner]((https://mail.google.com/mail/u/0?ui=2&ik=2d17d9c003&attid=0.1&permmsgid=msg-f:1831250611712150508&th=1969e8ba9dd1cbec&view=fimg&fur=ip&permmsgid=msg-f:1831250611712150508&sz=s0-l75-ft&attbid=ANGjdJ_4aEqMXE-incL35pISifZLWlyU8T8mIgp5Dt94XCKwGDku4qDI4MS4QLqQz35uy0mwZ_OjoKZHtCb0O-4fQy40wIE60xc2PB9hIvdqyRlAaSMvJfBpwhn6fG0&disp=emb&realattid=9F5715A2-D520-490F-A938-AA5AF7059D10&zw)
 
 **ClarityFlow** is a progressive web app (PWA) built with **Next.js** to promote mindful, spiritual, and holistic well-being. It supports users of all beliefs by integrating universal mindfulness techniques like meditation, gratitude, prayer tracking, and spiritual journaling.
 
