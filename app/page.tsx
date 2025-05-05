@@ -18,13 +18,12 @@ function MorningVideoModal({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
       <div className="w-full h-full max-w-4xl max-h-[80vh]">
         <div className="relative w-full h-0 pb-[56.25%]">
-          <iframe
-            className="absolute top-0 left-0 w-full h-full"
-            src="https://www.youtube.com/embed/OVUXGDf6YSE?autoplay=1&rel=0"
-            title="Morning Inspiration"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-            allowFullScreen
-          ></iframe>
+        <iframe
+  className="absolute top-0 left-0 w-full h-full"
+  src="https://www.youtube.com/embed/OVUXGDf6YSE?autoplay=1&rel=0&controls=0&modestbranding=1&fs=0&disablekb=1"
+  title="Morning Inspiration"
+  allow="accelerometer; autoplay; encrypted-media"
+></iframe>
         </div>
         <button
           onClick={onClose}
