@@ -30,9 +30,6 @@ const [prayers, setPrayers] = useState<Prayer[]>([]);
 
 
 
-// Prayer state changes will be handled by the main useEffect that saves data to localStorage
-
-// Add these prayer functions
 const togglePrayer = (id: string) => {
   setPrayers(prayers.map(p => 
     p.id === id ? { ...p, completed: !p.completed } : p
