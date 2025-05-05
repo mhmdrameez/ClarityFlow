@@ -446,7 +446,15 @@ const addVisualization = (desc: string, timeframe?: string) => {
 
 <footer className="mt-8 py-4 text-center text-sm text-muted-foreground border-t">
   <p>
-    ClarityFlow © {new Date().getFullYear()} 
+    ClarityFlow v1.4 ✨ by{" "}
+    <a
+      href="https://mhmdrameezweb.netlify.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-500 hover:underline ml-1"
+    >
+      mhmdrameez
+    </a>
   </p>
 </footer>
 
