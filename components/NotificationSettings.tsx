@@ -267,7 +267,7 @@ export function NotificationSettings() {
         <div className="pt-4 border-t">
           <div className="flex items-center gap-2 mb-3">
             <Building2 size={20} className="text-primary" />
-            <h4 className="font-medium">Prayer Settings</h4>
+            <h4 className="font-medium">Islamic Prayer Settings</h4>
           </div>
           
           <div className="space-y-4">
