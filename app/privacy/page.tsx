@@ -6,47 +6,49 @@ export default function PrivacyPolicy() {
         
         <section className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">1. Information We Collect</h2>
-          <p>ClarityLife collects minimal data to enhance your wellness journey:</p>
+          <p>To provide our wellness services, we collect:</p>
           <ul className="list-disc pl-6 space-y-2 mt-2">
-            <li><strong>Wellness Data:</strong> Prayer times, meditation sessions, gratitude entries, and dhikr counts you voluntarily record</li>
-            <li><strong>Device Information:</strong> Basic device data for app functionality</li>
-            <li><strong>Usage Analytics:</strong> Anonymous usage patterns to improve features</li>
+            <li><strong>Wellness Data:</strong> Activities you track (meditation, gratitude, etc.)</li>
+            <li><strong>Account Information:</strong> Basic profile details for personalization</li>
+            <li><strong>Usage Data:</strong> How you interact with features to improve the app</li>
+            <li><strong>Device Information:</strong> Basic technical data for compatibility</li>
           </ul>
         </section>
   
         <section className="mt-8">
-          <h2 className="text-2xl font-semibold mb-4">2. How We Use Your Data</h2>
-          <p>Your data serves your spiritual growth:</p>
+          <h2 className="text-2xl font-semibold mb-4">2. How We Use Information</h2>
+          <p>Your data helps us:</p>
           <ul className="list-disc pl-6 space-y-2 mt-2">
-            <li>Personalize your mindfulness experience</li>
-            <li>Generate progress insights and analytics</li>
-            <li>Improve app functionality</li>
-            <li>Never for third-party advertising</li>
+            <li>Deliver personalized mindfulness features</li>
+            <li>Analyze trends to improve the app</li>
+            <li>Provide customer support</li>
+            <li>Ensure app security and prevent misuse</li>
           </ul>
+          <p className="mt-4">We never sell your personal data to third parties.</p>
         </section>
   
         <section className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">3. Data Security</h2>
-          <p>We implement industry-standard measures:</p>
+          <p>We protect your information with:</p>
           <ul className="list-disc pl-6 space-y-2 mt-2">
-            <li>Local storage encryption</li>
-            <li>Secure authentication protocols</li>
+            <li>Industry-standard encryption</li>
             <li>Regular security audits</li>
+            <li>Limited employee access</li>
           </ul>
         </section>
   
         <section className="mt-8">
-          <h2 className="text-2xl font-semibold mb-4">4. Your Rights</h2>
-          <p>You may:</p>
+          <h2 className="text-2xl font-semibold mb-4">4. Your Choices</h2>
+          <p>You can:</p>
           <ul className="list-disc pl-6 space-y-2 mt-2">
-            <li>Access, update, or delete your data anytime</li>
-            <li>Export your wellness records</li>
-            <li>Opt-out of analytics collection</li>
+            <li>Access, edit, or delete your data anytime</li>
+            <li>Export your wellness history</li>
+            <li>Opt-out of non-essential data collection</li>
           </ul>
         </section>
   
         <div className="mt-12 pt-6 border-t">
-          <p>Contact us at <a href="mailto:privacy@claritylife.app" className="text-blue-500 hover:underline">privacy@claritylife.app</a> for any questions.</p>
+          <p>Contact us at <a href="mailto:privacy@claritylife.app" className="text-blue-500 hover:underline">privacy@claritylife.app</a> with any questions.</p>
         </div>
       </main>
     );
