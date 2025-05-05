@@ -3,6 +3,8 @@
 
 import { useState, useEffect } from 'react';
 import { Bell, BellOff, Building2 } from 'lucide-react';
+import toast from 'react-hot-toast';
+
 
 // Custom Switch Component
 const CustomSwitch = ({
@@ -153,9 +155,32 @@ export function NotificationSettings() {
   };
 
   const scheduleNotifications = () => {
-    saveToLocalStorage('morningTime', morningTime);
-    saveToLocalStorage('eveningTime', eveningTime);
-    console.log('Scheduling notifications for', morningTime, 'and', eveningTime);
+    try {
+      // Save to localStorage
+      saveToLocalStorage('morningTime', morningTime);
+      saveToLocalStorage('eveningTime', eveningTime);
+      
+      // Schedule the notifications here
+      console.log('Scheduling notifications for', morningTime, 'and', eveningTime);
+      
+      // Show success toast
+      toast.success('Settings saved successfully!', {
+        duration: 3000,
+        position: 'bottom-center',
+        style: {
+          background: '#4CAF50',
+          color: '#fff',
+          padding: '16px',
+          borderRadius: '8px',
+        },
+      });
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      toast.error('Failed to save settings. Please try again.', {
+        duration: 3000,
+        position: 'bottom-center',
+      });
+    }
   };
 
   const schedulePrayerNotifications = () => {
