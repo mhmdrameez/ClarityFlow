@@ -481,8 +481,7 @@ const addVisualization = (desc: string, timeframe?: string) => {
       © {new Date().getFullYear()} ClarityFlow. All rights reserved.
     </p>
   </div>
-</footer></svg>
-
+</footer>
     </div>
   );
 }
