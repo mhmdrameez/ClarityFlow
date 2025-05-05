@@ -21,12 +21,17 @@
 
 ---
 
-## 🛠 Tech Stack
+## 🚀 Tech Stack
 
-- **Frontend**: [Next.js](https://nextjs.org/) (React framework)
-- **Authentication (Planned)**: [Firebase Auth](https://firebase.google.com/products/auth)
-- **Database & APIs (Planned)**: PostgreSQL via Next.js API routes
-
+- **Frontend**: [Next.js](https://nextjs.org/) (React Framework)
+- **Authentication**: [Firebase Authentication](https://firebase.google.com/products/auth) (Future)
+- **Database**: [PostgreSQL](https://www.postgresql.org/) (Future)
+- **Backend/API**: Next.js API Routes  (Future)
+- **ORM**: [Prisma](https://www.prisma.io/) (with PostgreSQL) (Future)
+- **PWA Support**: [next-pwa](https://github.com/shadowwalker/next-pwa) plugin
+- **Hosting**:
+  - [Vercel](https://vercel.com/) – Optimized for Next.js frontend 
+  - [Render](https://render.com/) – Backend/API and PostgreSQL hosting(Future)
 ---
 
 ## 🚀 Getting Started
