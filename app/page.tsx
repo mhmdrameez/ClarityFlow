@@ -13,7 +13,29 @@ import { Plus } from 'lucide-react';
 import { NotificationSettings } from '../components/NotificationSettings';
 import { PrayerTracker } from '@/components/PrayerTracker';
 
-
+function MorningVideoModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-90 z-50 flex items-center justify-center p-4">
+      <div className="w-full h-full max-w-4xl max-h-[80vh]">
+        <div className="relative w-full h-0 pb-[56.25%]">
+          <iframe
+            className="absolute top-0 left-0 w-full h-full"
+            src="https://www.youtube.com/embed/OVUXGDf6YSE?autoplay=1&rel=0"
+            title="Morning Inspiration"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+            allowFullScreen
+          ></iframe>
+        </div>
+        <button
+          onClick={onClose}
+          className="mt-4 px-6 py-2 bg-white text-black rounded-lg font-medium hover:bg-gray-200 transition-colors"
+        >
+          Close Video
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function WellnessApp() {
   const [activeTab, setActiveTab] = useState<'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude' | 'settings' | 'prayer'>('goals');
@@ -24,130 +46,69 @@ export default function WellnessApp() {
   const [gratitudeEntries, setGratitudeEntries] = useState<GratitudeEntry[]>([]);
   const [input, setInput] = useState('');
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [prayers, setPrayers] = useState<Prayer[]>([]);
+  const [showMorningVideo, setShowMorningVideo] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [isIOS, setIsIOS] = useState(false);
 
-  // Add to your state
-const [prayers, setPrayers] = useState<Prayer[]>([]);
+  // Check for morning video when component mounts
+  useEffect(() => {
+    const checkMorningVideo = () => {
+      const now = new Date();
+      const hours = now.getHours();
+      const isMorning = hours >= 5 && hours < 11;
+      
+      const lastShownDate = localStorage.getItem('lastVideoShownDate');
+      const today = new Date().toISOString().split('T')[0];
+      
+      if (isMorning && lastShownDate !== today) {
+        setShowMorningVideo(true);
+        localStorage.setItem('lastVideoShownDate', today);
+      }
+    };
 
+    checkMorningVideo();
+  }, []);
 
-
-// Prayer state changes will be handled by the main useEffect that saves data to localStorage
-
-// Add these prayer functions
-const togglePrayer = (id: string) => {
-  setPrayers(prayers.map(p => 
-    p.id === id ? { ...p, completed: !p.completed } : p
-  ));
-};
-
-const addPrayerTime = (name: string, time: string) => {
-  const today = new Date().toISOString().split('T')[0];
-  const existingPrayer = prayers.find(p => 
-    p.date === today && p.name === name
-  );
-
-  if (existingPrayer) {
-    setPrayers(prayers.map(p =>
-      p.id === existingPrayer.id ? { ...p, time } : p
-    ));
-  } else {
-    setPrayers([...prayers, {
-      id: Date.now().toString(),
-      name: name as any,
-      completed: false,
-      date: today,
-      time
-    }]);
-  }
-};
-
-
-
-  
-
-  // Add this to your WellnessApp component
+  // Notification permission
   useEffect(() => {
     const requestNotificationPermission = async () => {
       if ('Notification' in window && 'serviceWorker' in navigator) {
         try {
-          const permission = await Notification.requestPermission();
-          if (permission === 'granted') {
-            console.log('Notification permission granted');
-            
-            // Schedule notifications after permission is granted
-            await scheduleDailyNotifications();
-            
-            // Register periodic sync (if supported)
-            if ('periodicSync' in (navigator as any)) {
-              try {
-                await (navigator as any).periodicSync.register('daily-reminders', {
-                  minInterval: 24 * 60 * 60 * 1000 // 1 day
-                });
-                console.log('Periodic sync registered');
-              } catch (err) {
-                console.log('Periodic sync could not be registered', err);
-              }
-            }
-          }
+          await Notification.requestPermission();
         } catch (err) {
           console.error('Notification permission error:', err);
         }
       }
     };
-
     requestNotificationPermission();
-  }, []); // Empty dependency array means this runs once on mount
+  }, []);
 
-  // Move scheduleDailyNotifications inside the component but outside of any effects
-  const scheduleDailyNotifications = async () => {
-    if ('serviceWorker' in navigator && 'Notification' in window) {
-      const registration = await navigator.serviceWorker.ready;
-      
-      // Get current time in IST
-      const now = new Date();
-      const istOffset = 5.5 * 60 * 60 * 1000; // IST is UTC+5:30
-      const istTime = new Date(now.getTime() + istOffset);
-      
-      // Schedule morning notification at 8 AM IST
-      const morningTime = new Date(istTime);
-      morningTime.setHours(8, 0, 0, 0);
-      if (morningTime < istTime) {
-        morningTime.setDate(morningTime.getDate() + 1);
-      }
-      const morningDelay = morningTime.getTime() - istTime.getTime();
-      
-      setTimeout(() => {
-        registration.showNotification('Morning Reminder', {
-          body: '🌞 Start your day with positive visualizations!',
-          icon: '/icons/icon-192x192.png',
-          badge: '/icons/badge-72x72.png'
-        });
-      }, morningDelay);
-      
-      // Schedule evening notification at 8 PM IST
-      const eveningTime = new Date(istTime);
-      eveningTime.setHours(20, 0, 0, 0);
-      if (eveningTime < istTime) {
-        eveningTime.setDate(eveningTime.getDate() + 1);
-      }
-      const eveningDelay = eveningTime.getTime() - istTime.getTime();
-      
-      setTimeout(() => {
-        registration.showNotification('Evening Reminder', {
-          body: '🌙 Reflect on your visualizations before bed',
-          icon: '/icons/icon-192x192.png',
-          badge: '/icons/badge-72x72.png'
-        });
-      }, eveningDelay);
-    }
-  };
+  // Install prompt detection
+  useEffect(() => {
+    setIsStandalone(
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as any).standalone
+    );
 
-// Call this after getting notification permission
-// You might want to put this in the permission granted callback
-scheduleDailyNotifications();
+    const userAgent = window.navigator.userAgent;
+    setIsIOS(/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream);
+
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
 
   // Load data from localStorage
   useEffect(() => {
-    if (typeof window !== 'undefined') { // Ensure this runs only on the client
+    if (typeof window !== 'undefined') {
       const savedGoals = localStorage.getItem('wellness-goals');
       const savedSessions = localStorage.getItem('meditation-sessions');
       const savedViz = localStorage.getItem('visualizations');
@@ -171,7 +132,7 @@ scheduleDailyNotifications();
 
   // Save data to localStorage
   useEffect(() => {
-    if (typeof window !== 'undefined') { // Ensure this runs only on the client
+    if (typeof window !== 'undefined') {
       localStorage.setItem('wellness-goals', JSON.stringify(goals));
       localStorage.setItem('meditation-sessions', JSON.stringify(sessions));
       localStorage.setItem('visualizations', JSON.stringify(visualizations));
@@ -181,28 +142,6 @@ scheduleDailyNotifications();
       localStorage.setItem('prayers', JSON.stringify(prayers));
     }
   }, [goals, sessions, visualizations, affirmations, gratitudeEntries, darkMode, prayers]);
-
-
-  // Delete functions
-  const deleteGoal = (id: string) => {
-    setGoals(goals.filter(goal => goal.id !== id));
-  };
-
-  const deleteVisualization = (id: string) => {
-    setVisualizations(visualizations.filter(viz => viz.id !== id));
-  };
-
-  const deleteSession = (id: string) => {
-    setSessions(sessions.filter(session => session.id !== id));
-  };
-
-  const deleteAffirmation = (id: string) => {
-    setAffirmations(affirmations.filter(a => a.id !== id));
-  };
-
-  const deleteGratitudeEntry = (id: string) => {
-    setGratitudeEntries(gratitudeEntries.filter(entry => entry.id !== id));
-  };
 
   // Goal functions
   const addGoal = () => {
@@ -221,6 +160,10 @@ scheduleDailyNotifications();
     setGoals(goals.map(g => g.id === id ? { ...g, completed: !g.completed } : g));
   };
 
+  const deleteGoal = (id: string) => {
+    setGoals(goals.filter(goal => goal.id !== id));
+  };
+
   // Meditation functions
   const logMeditation = (minutes: number) => {
     setSessions([...sessions, {
@@ -230,19 +173,23 @@ scheduleDailyNotifications();
     }]);
   };
 
-// In your WellnessApp component, update the addVisualization function:
-// In your WellnessApp component
-const addVisualization = (desc: string, timeframe?: string) => {
-  const newVisualization: Visualization = {
-    id: Date.now().toString(),
-    description: desc,
-    date: new Date().toISOString().split('T')[0],
-    timeframe: timeframe || undefined
+  const deleteSession = (id: string) => {
+    setSessions(sessions.filter(session => session.id !== id));
   };
-  setVisualizations([...visualizations, newVisualization]);
-};
 
+  // Visualization functions
+  const addVisualization = (desc: string, timeframe?: string) => {
+    setVisualizations([...visualizations, {
+      id: Date.now().toString(),
+      description: desc,
+      date: new Date().toISOString().split('T')[0],
+      timeframe: timeframe || undefined
+    }]);
+  };
 
+  const deleteVisualization = (id: string) => {
+    setVisualizations(visualizations.filter(viz => viz.id !== id));
+  };
 
   // Affirmation functions
   const addAffirmation = (text: string) => {
@@ -262,6 +209,10 @@ const addVisualization = (desc: string, timeframe?: string) => {
     ));
   };
 
+  const deleteAffirmation = (id: string) => {
+    setAffirmations(affirmations.filter(a => a.id !== id));
+  };
+
   // Gratitude functions
   const addGratitudeEntry = (text: string) => {
     if (!text.trim()) return;
@@ -275,7 +226,39 @@ const addVisualization = (desc: string, timeframe?: string) => {
     setInput('');
   };
 
-  // Analytics calculations
+  const deleteGratitudeEntry = (id: string) => {
+    setGratitudeEntries(gratitudeEntries.filter(entry => entry.id !== id));
+  };
+
+  // Prayer functions
+  const togglePrayer = (id: string) => {
+    setPrayers(prayers.map(p => 
+      p.id === id ? { ...p, completed: !p.completed } : p
+    ));
+  };
+
+  const addPrayerTime = (name: string, time: string) => {
+    const today = new Date().toISOString().split('T')[0];
+    const existingPrayer = prayers.find(p => 
+      p.date === today && p.name === name
+    );
+
+    if (existingPrayer) {
+      setPrayers(prayers.map(p =>
+        p.id === existingPrayer.id ? { ...p, time } : p
+      ));
+    } else {
+      setPrayers([...prayers, {
+        id: Date.now().toString(),
+        name: name as any,
+        completed: false,
+        date: today,
+        time
+      }]);
+    }
+  };
+
+  // Analytics calculation
   const completionRate = () => {
     const todayGoals = goals.filter(g => g.date === new Date().toISOString().split('T')[0]);
     return todayGoals.length
@@ -283,80 +266,44 @@ const addVisualization = (desc: string, timeframe?: string) => {
       : 0;
   };
 
+  // Install handler
+  const handleInstallClick = () => {
+    if (isIOS) {
+      alert('To install this app, tap the "Share" button in Safari and select "Add to Home Screen".');
+    } else if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then((choiceResult: any) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        }
+        setDeferredPrompt(null);
+      });
+    }
+  };
+
+  // Dark mode toggle
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     document.documentElement.classList.toggle('dark', newDarkMode);
   };
 
-
-
-  const [isStandalone, setIsStandalone] = useState(false); // Detect if the app is installed
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null); // Store the beforeinstallprompt event
-  const [isIOS, setIsIOS] = useState(false); // Detect if the user is on iOS
-
-  useEffect(() => {
-    // Detect if the app is running in standalone mode
-    setIsStandalone(
-      window.matchMedia('(display-mode: standalone)').matches ||
-      (window.navigator as any).standalone
-    );
-
-    // Detect if the user is on iOS
-    const userAgent = window.navigator.userAgent;
-    setIsIOS(/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream);
-
-    // Listen for the beforeinstallprompt event (for Android and desktop)
-    const handleBeforeInstallPrompt = (e: any) => {
-      e.preventDefault(); // Prevent the default mini-infobar from appearing
-      setDeferredPrompt(e); // Save the event for later use
-    };
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
-    };
-  }, []);
-
-  const handleInstallClick = () => {
-    if (isIOS) {
-      // Show instructions for iOS users
-      alert(
-        'To install this app, tap the "Share" button in Safari and select "Add to Home Screen".'
-      );
-    } else if (deferredPrompt) {
-      // Show the install prompt for Android and desktop
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then((choiceResult: any) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        } else {
-          console.log('User dismissed the install prompt');
-        }
-        setDeferredPrompt(null); // Clear the saved prompt
-      });
-    } else {
-      console.log('Install prompt is not available');
-    }
-  };
-
-
   return (
-    <div className="min-h-screen max-w-md mx-auto p-4">
+    <div className="min-h-screen max-w-md mx-auto p-4 relative">
+      {showMorningVideo && <MorningVideoModal onClose={() => setShowMorningVideo(false)} />}
 
-<header className="mb-6 flex justify-between items-center">
+      <header className="mb-6 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">ClarityFlow</h1>
           <p className="text-muted-foreground">Stay focused. Grow daily. Live mindfully.</p>
         </div>
-        {!isStandalone && ( 
+        {!isStandalone && (
           <button
-            onClick={handleInstallClick} 
+            onClick={handleInstallClick}
             className="p-2 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition-colors"
             aria-label="Install App"
           >
-            <Plus size={20} /> 
+            <Plus size={20} />
           </button>
         )}
         <button
@@ -410,7 +357,6 @@ const addVisualization = (desc: string, timeframe?: string) => {
         />
       )}
 
-
       {activeTab === 'gratitude' && (
         <GratitudeTracker
           entries={gratitudeEntries}
@@ -421,14 +367,13 @@ const addVisualization = (desc: string, timeframe?: string) => {
         />
       )}
 
-{activeTab === 'prayer' && (
-  <PrayerTracker
-    prayers={prayers}
-    togglePrayer={togglePrayer}
-    addPrayerTime={addPrayerTime}
-  />
-)}
-
+      {activeTab === 'prayer' && (
+        <PrayerTracker
+          prayers={prayers}
+          togglePrayer={togglePrayer}
+          addPrayerTime={addPrayerTime}
+        />
+      )}
 
       {activeTab === 'analytics' && (
         <AnalyticsDashboard
@@ -438,25 +383,22 @@ const addVisualization = (desc: string, timeframe?: string) => {
         />
       )}
 
-{activeTab === 'settings' && (
-  <NotificationSettings />
-)}
+      {activeTab === 'settings' && (
+        <NotificationSettings />
+      )}
 
-      
-
-<footer className="mt-8 py-4 text-center text-sm text-muted-foreground border-t">
-<p>
-Vibe coded ✨ by{" "}
-<a
-    href=""
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-blue-500 hover:underline ml-1"
-  >
-    mhmdrameez
-  </a>
-</p>
-
+      <footer className="mt-8 py-4 text-center text-sm text-muted-foreground border-t">
+        <p>
+          Vibe coded ✨ by{" "}
+          <a
+            href=""
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-500 hover:underline ml-1"
+          >
+            mhmdrameez
+          </a>
+        </p>
       </footer>
     </div>
   );
