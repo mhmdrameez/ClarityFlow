@@ -294,7 +294,7 @@ export function NotificationSettings() {
                   onClick={sendTestNotification}
                   className="w-full p-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                 >
-                  Send Test Notification
+                  Send Test PWA CHECKK Notification
                 </button>
               )}
             </div>

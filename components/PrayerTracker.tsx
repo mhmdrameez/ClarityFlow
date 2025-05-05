@@ -122,6 +122,7 @@ export function PrayerTracker({ prayers, togglePrayer, addPrayerTime }: PrayerTr
     { value: 'AllahuAkbar', label: 'اللّٰهُ أَكْبَرُ ' },
     { value: 'LaIlahaIllallah', label: 'لَا إِلَٰهَ إِلَّا ٱللَّٰهُ ' },
     { value: 'Astaghfirullah', label: 'أَسْتَغْفِرُ ٱللَّٰهَ ' },
+    { value: 'Swalath', label: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ' },
   ];
 
   return (
