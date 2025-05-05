@@ -448,7 +448,7 @@ const addVisualization = (desc: string, timeframe?: string) => {
 <p>
 Vibe coded ✨ by{" "}
 <a
-    href=""
+    href="https://mhmdrameezweb.netlify.app/"
     target="_blank"
     rel="noopener noreferrer"
     className="text-blue-500 hover:underline ml-1"
