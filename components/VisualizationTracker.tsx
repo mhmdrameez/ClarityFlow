@@ -64,7 +64,7 @@ export function VisualizationTracker({
       <div className="space-y-2">
         <textarea 
           value={input}
-          placeholder="Describe your vision or goal in detail..."
+          placeholder="Describe your vision or goal in detail...."
           className="w-full p-3 border rounded-lg min-h-[120px] focus:ring-2 focus:ring-primary focus:border-transparent"
           onChange={(e) => setInput(e.target.value)}
         />
