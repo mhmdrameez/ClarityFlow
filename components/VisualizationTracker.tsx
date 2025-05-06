@@ -20,27 +20,9 @@ export function VisualizationTracker({
   const [timeframe, setTimeframe] = useState<string>('');
   const [currentTime, setCurrentTime] = useState<string>('');
   
-  // Update current Indian time every second
-  useEffect(() => {
-    const updateTime = () => {
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: 'Asia/Kolkata',
-        hour12: true,
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-      };
-      const formatter = new Intl.DateTimeFormat('en-IN', options);
-      setCurrentTime(formatter.format(new Date()));
-    };
-    
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
-  const todayVisualizations = visualizations
-    .filter(viz => viz.date === new Date().toISOString().split('T')[0])
+
+  const allVisualizations = visualizations
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   const handleAddVisualization = () => {
@@ -98,17 +80,17 @@ export function VisualizationTracker({
         <h3 className="font-medium flex items-center justify-between">
           <span>Your Visualizations</span>
           <span className="text-sm text-muted-foreground">
-            {todayVisualizations.length} today
+            {allVisualizations.length} today
           </span>
         </h3>
         
-        {todayVisualizations.length === 0 ? (
+        {visualizations.length === 0 ? (
           <div className="p-4 text-center text-muted-foreground rounded-lg border border-dashed mt-2">
-            No visualizations recorded today
+            No visualizations recorded 
           </div>
         ) : (
           <div className="space-y-3 mt-3">
-            {todayVisualizations.map(viz => (
+            {visualizations.map(viz => (
               <div 
                 key={viz.id} 
                 className="p-4 border rounded-lg hover:bg-accent/10 transition-colors group relative"
