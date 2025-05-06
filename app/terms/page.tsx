@@ -6,7 +6,7 @@ export default function TermsOfService() {
   
         <section className="mt-8">
           <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
-          <p>By using ClarityLife, you agree to:</p>
+          <p>By using ClarityLife, you agree to</p>
           <ul className="list-disc pl-6 space-y-2 mt-2">
             <li>Use the app for personal spiritual growth</li>
             <li>Provide accurate information</li>
