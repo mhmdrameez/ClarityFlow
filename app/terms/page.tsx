@@ -10,7 +10,6 @@ export default function TermsOfService() {
           <ul className="list-disc pl-6 space-y-2 mt-2">
             <li>Use the app for personal spiritual growth</li>
             <li>Provide accurate information</li>
-            <li>Comply with Islamic principles of conduct</li>
           </ul>
         </section>
   
