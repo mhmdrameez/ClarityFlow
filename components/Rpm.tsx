@@ -53,7 +53,7 @@ export function RPMDailyPlanner({
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2 text-lg font-semibold">
-        <Zap size={20} className="text-blue-500 dark:text-blue-400" />
+        <Zap size={20} className=" dark:" />
         <h2 className="dark:text-white">RPM Daily Planner</h2>
       </div>
 
@@ -69,7 +69,7 @@ export function RPMDailyPlanner({
       <div className="space-y-4 p-4 rounded-lg shadow-sm border dark:border-gray-700 dark:bg-gray-800">
       <div>
   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1">
-    <Target size={16} className="text-blue-500 dark:text-blue-400" /> Purpose (Why is this important?)
+    <Target size={16} className=" dark:" /> Purpose (Why is this important?)
   </label>
   <input
     type="text"
@@ -82,7 +82,7 @@ export function RPMDailyPlanner({
 
 <div>
   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1">
-    <CheckCircle size={16} className="text-blue-500 dark:text-blue-400" /> Desired Outcome (What specific result?)
+    <CheckCircle size={16} className=" dark:" /> Desired Outcome (What specific result?)
   </label>
   <input
     type="text"
@@ -96,7 +96,7 @@ export function RPMDailyPlanner({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1">
-            <List size={16} className="text-blue-500 dark:text-blue-400" /> Massive Action Plan
+            <List size={16} className=" dark:" /> Massive Action Plan
           </label>
           <div className="space-y-2">
             {actionSteps.map((step, index) => (
@@ -120,7 +120,7 @@ export function RPMDailyPlanner({
             ))}
             <button
               onClick={addActionStep}
-              className="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1"
+              className="text-sm text-blue-600 hover:text-blue-700 dark: dark:hover:text-blue-300 flex items-center gap-1"
             >
               <Plus size={14} /> Add another action step
             </button>
@@ -181,7 +181,7 @@ export function RPMDailyPlanner({
                           <p className={`font-medium ${task.completed ? 'line-through text-gray-400 dark:text-gray-500' : 'dark:text-white'}`}>
                             {task.purpose}
                           </p>
-                          {task.starred && <Star size={16} className="text-blue-500 fill-blue-500 dark:text-blue-400 dark:fill-blue-400" />}
+                          {task.starred && <Star size={16} className=" fill-blue-500 dark: dark:fill-blue-400" />}
                         </div>
                         <p className={`text-sm ${task.completed ? 'text-gray-400 dark:text-gray-500' : 'text-gray-600 dark:text-gray-300'}`}>
                           {task.desiredOutcome}
@@ -191,7 +191,7 @@ export function RPMDailyPlanner({
                     <div className="flex gap-2">
                       <button
                         onClick={() => toggleStar(task.id)}
-                        className={`p-1 ${task.starred ? 'text-blue-500 dark:text-blue-400' : 'text-gray-300 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-400'}`}
+                        className={`p-1 ${task.starred ? ' dark:' : 'text-gray-300 hover: dark:text-gray-400 dark:hover:'}`}
                       >
                         <Star size={16} fill={task.starred ? 'currentColor' : 'none'} />
                       </button>
@@ -213,7 +213,7 @@ export function RPMDailyPlanner({
                   {expandedTask === task.id && (
                     <div className="mt-3 pl-9">
                       <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-1">
-                        <List size={14} className="text-blue-500 dark:text-blue-400" /> Action Plan
+                        <List size={14} className=" dark:" /> Action Plan
                       </h4>
                       <ul className="space-y-2">
                         {task.massiveActionPlan.map((step, index) => (
