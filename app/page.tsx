@@ -572,7 +572,7 @@ const addVisualization = (desc: string, timeframe?: string) => {
   <div className="space-y-6">
     {/* App Info Section */}
     <div className="mb-4">
-      <h3 className="font-semibold text-base text-foreground">ClarityFlow v1.5 ✨</h3>
+      <h3 className="font-semibold text-base text-foreground">ClarityFlow v1.6 ✨</h3>
       <p className="text-sm text-muted-foreground">Empowering mindful living through technology</p>
       <p className="text-xs text-muted-foreground mt-2">Open source project built with ❤️</p>
     </div>
