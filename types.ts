@@ -16,9 +16,9 @@ export type Goal = {
     id: string;
     description: string;
     date: string;
-    timeframe?: string;  // Add this line
+    timeframe?: string;
+    feeling?: string; // Add this
   }
-
 
   export type Affirmation = {
     id: string;
@@ -41,4 +41,14 @@ export type Goal = {
     completed: boolean;
     date: string; // YYYY-MM-DD format
     time?: string; // Actual prayer time
+  }
+
+  export interface RPMTask {
+    id: string;
+    purpose: string;
+    desiredOutcome: string;
+    massiveActionPlan: string[];
+    completed: boolean;
+    starred: boolean;
+    date: string; // ISO date string
   }

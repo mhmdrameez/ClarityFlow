@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Goal, MeditationSession, Visualization, Affirmation, GratitudeEntry, Prayer } from '../types';
+import { Goal, MeditationSession, Visualization, Affirmation, GratitudeEntry, Prayer, RPMTask } from '../types';
 import { NavigationTabs } from '../components/NavigationTabs';
 import { GoalTracker } from '../components/GoalTracker';
 import { MeditationTracker } from '../components/MeditationTracker';
@@ -12,11 +12,13 @@ import { InstallPrompt } from '../components/InstallPrompt';
 import { Plus } from 'lucide-react';
 import { NotificationSettings } from '../components/NotificationSettings';
 import { PrayerTracker } from '@/components/PrayerTracker';
+import { RPMDailyPlanner } from '../components/Rpm';
+
 
 
 
 export default function WellnessApp() {
-  const [activeTab, setActiveTab] = useState<'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude' | 'settings' | 'prayer'>('goals');
+  const [activeTab, setActiveTab] = useState<'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude' | 'settings' | 'prayer' | 'rpm'>('goals');
   const [goals, setGoals] = useState<Goal[]>([]);
   const [sessions, setSessions] = useState<MeditationSession[]>([]);
   const [visualizations, setVisualizations] = useState<Visualization[]>([]);
@@ -24,9 +26,44 @@ export default function WellnessApp() {
   const [gratitudeEntries, setGratitudeEntries] = useState<GratitudeEntry[]>([]);
   const [input, setInput] = useState('');
   const [darkMode, setDarkMode] = useState<boolean>(false);
+  const [rpmTasks, setRpmTasks] = useState<RPMTask[]>([]);
+
 
   // Add to your state
 const [prayers, setPrayers] = useState<Prayer[]>([]);
+
+
+ // RPM Functions
+ const addRpmTask = (purpose: string, outcome: string, actions: string[]) => {
+  setRpmTasks([...rpmTasks, {
+    id: Date.now().toString(),
+    purpose,
+    desiredOutcome: outcome,
+    massiveActionPlan: actions,
+    completed: false,
+    starred: false,
+    date: new Date().toISOString().split('T')[0]
+  }]);
+};
+
+const toggleRpmTaskCompletion = (id: string) => {
+  setRpmTasks(rpmTasks.map(task => 
+    task.id === id ? { ...task, completed: !task.completed } : task
+  ));
+};
+
+const toggleRpmStar = (id: string) => {
+  setRpmTasks(rpmTasks.map(task => 
+    task.id === id ? { ...task, starred: !task.starred } : task
+  ));
+};
+
+const deleteRpmTask = (id: string) => {
+  setRpmTasks(rpmTasks.filter(task => task.id !== id));
+};
+
+
+
 
 
 
@@ -142,42 +179,45 @@ const addPrayerTime = (name: string, time: string) => {
 // You might want to put this in the permission granted callback
 scheduleDailyNotifications();
 
-  // Load data from localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') { // Ensure this runs only on the client
-      const savedGoals = localStorage.getItem('wellness-goals');
-      const savedSessions = localStorage.getItem('meditation-sessions');
-      const savedViz = localStorage.getItem('visualizations');
-      const savedAffirmations = localStorage.getItem('affirmations');
-      const savedGratitude = localStorage.getItem('gratitude-entries');
-      const savedDarkMode = localStorage.getItem('dark-mode');
-      const savedPrayers = localStorage.getItem('prayers');
+ // Load data from localStorage
+ useEffect(() => {
+  if (typeof window !== 'undefined') {
+    const savedGoals = localStorage.getItem('wellness-goals');
+    const savedSessions = localStorage.getItem('meditation-sessions');
+    const savedViz = localStorage.getItem('visualizations');
+    const savedAffirmations = localStorage.getItem('affirmations');
+    const savedGratitude = localStorage.getItem('gratitude-entries');
+    const savedDarkMode = localStorage.getItem('dark-mode');
+    const savedPrayers = localStorage.getItem('prayers');
+    const savedRpmTasks = localStorage.getItem('rpm-tasks');
 
-      if (savedGoals) setGoals(JSON.parse(savedGoals));
-      if (savedSessions) setSessions(JSON.parse(savedSessions));
-      if (savedViz) setVisualizations(JSON.parse(savedViz));
-      if (savedAffirmations) setAffirmations(JSON.parse(savedAffirmations));
-      if (savedGratitude) setGratitudeEntries(JSON.parse(savedGratitude));
-      if (savedDarkMode) {
-        setDarkMode(savedDarkMode === 'true');
-        document.documentElement.classList.toggle('dark', savedDarkMode === 'true');
-      }
-      if (savedPrayers) setPrayers(JSON.parse(savedPrayers));
+    if (savedGoals) setGoals(JSON.parse(savedGoals));
+    if (savedSessions) setSessions(JSON.parse(savedSessions));
+    if (savedViz) setVisualizations(JSON.parse(savedViz));
+    if (savedAffirmations) setAffirmations(JSON.parse(savedAffirmations));
+    if (savedGratitude) setGratitudeEntries(JSON.parse(savedGratitude));
+    if (savedDarkMode) {
+      setDarkMode(savedDarkMode === 'true');
+      document.documentElement.classList.toggle('dark', savedDarkMode === 'true');
     }
-  }, []);
+    if (savedPrayers) setPrayers(JSON.parse(savedPrayers));
+    if (savedRpmTasks) setRpmTasks(JSON.parse(savedRpmTasks));
+  }
+}, []);
 
-  // Save data to localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') { // Ensure this runs only on the client
-      localStorage.setItem('wellness-goals', JSON.stringify(goals));
-      localStorage.setItem('meditation-sessions', JSON.stringify(sessions));
-      localStorage.setItem('visualizations', JSON.stringify(visualizations));
-      localStorage.setItem('affirmations', JSON.stringify(affirmations));
-      localStorage.setItem('gratitude-entries', JSON.stringify(gratitudeEntries));
-      localStorage.setItem('dark-mode', darkMode.toString());
-      localStorage.setItem('prayers', JSON.stringify(prayers));
-    }
-  }, [goals, sessions, visualizations, affirmations, gratitudeEntries, darkMode, prayers]);
+// Save data to localStorage
+useEffect(() => {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('wellness-goals', JSON.stringify(goals));
+    localStorage.setItem('meditation-sessions', JSON.stringify(sessions));
+    localStorage.setItem('visualizations', JSON.stringify(visualizations));
+    localStorage.setItem('affirmations', JSON.stringify(affirmations));
+    localStorage.setItem('gratitude-entries', JSON.stringify(gratitudeEntries));
+    localStorage.setItem('dark-mode', darkMode.toString());
+    localStorage.setItem('prayers', JSON.stringify(prayers));
+    localStorage.setItem('rpm-tasks', JSON.stringify(rpmTasks));
+  }
+}, [goals, sessions, visualizations, affirmations, gratitudeEntries, darkMode, prayers, rpmTasks]);
 
 
   // Delete functions
@@ -425,6 +465,16 @@ const addVisualization = (desc: string, timeframe?: string) => {
     addPrayerTime={addPrayerTime}
   />
 )}
+
+{activeTab === 'rpm' && (
+        <RPMDailyPlanner
+          tasks={rpmTasks}
+          addTask={addRpmTask}
+          toggleCompletion={toggleRpmTaskCompletion}
+          toggleStar={toggleRpmStar}
+          deleteTask={deleteRpmTask}
+        />
+      )}
 
 
       {activeTab === 'analytics' && (

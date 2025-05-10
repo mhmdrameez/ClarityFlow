@@ -1,9 +1,9 @@
-import { Check, Activity, Eye, BarChart2, MessageCircle, Heart, Settings, Building2 } from 'lucide-react';
+import { Check, Activity, Eye, BarChart2, MessageCircle, Heart, Settings, Building2, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface NavigationTabsProps {
   activeTab: string;
-  setActiveTab: (tab: 'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude' | 'settings' | 'prayer') => void;
+  setActiveTab: (tab: 'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude' | 'settings' | 'prayer' | 'rpm') => void;
 }
 
 export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps) {
@@ -91,6 +91,13 @@ export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps)
         >
           <BarChart2 size={20} />
           <span className="text-xs mt-1">Stats</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab('rpm')}
+          className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'rpm' ? 'bg-accent' : ''}`}
+        >
+          <Zap size={20} />
+          <span className="text-xs mt-1">RPM</span>
         </button>
         <button 
           onClick={() => setActiveTab('settings')}
