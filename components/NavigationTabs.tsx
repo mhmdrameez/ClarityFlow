@@ -1,9 +1,9 @@
-import { Check, Activity, Eye, BarChart2, MessageCircle, Heart, Settings, Building2, Zap } from 'lucide-react';
+import { Check, Activity, Eye, BarChart2, MessageCircle, Heart, Settings, Building2, Zap, Notebook } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface NavigationTabsProps {
   activeTab: string;
-  setActiveTab: (tab: 'goals' | 'meditate' | 'visualize' | 'analytics' | 'affirmations' | 'gratitude' | 'settings' | 'prayer' | 'rpm') => void;
+  setActiveTab: (tab: 'goals' | 'meditate' | 'visualize' | 'analytics' | 'journal' | 'affirmations' | 'gratitude' | 'settings' | 'prayer' | 'rpm') => void;
 }
 
 export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps) {
@@ -40,7 +40,7 @@ export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps)
 
   return (
     <div className="overflow-x-auto">
-      <nav className="flex gap-3 mb-6 w-[450px]">
+      <nav className="flex gap-3 mb-6 w-[550px]"> {/* Increased width to accommodate more tabs */}
         <button 
           onClick={() => setActiveTab('goals')}
           className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'goals' ? 'bg-accent' : ''}`}
@@ -61,6 +61,13 @@ export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps)
         >
           <Eye size={20} />
           <span className="text-xs mt-1">Visualize</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab('journal')}
+          className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'journal' ? 'bg-accent' : ''}`}
+        >
+          <Notebook size={20} />
+          <span className="text-xs mt-1">Journal</span>
         </button>
         <button 
           onClick={() => setActiveTab('affirmations')}
@@ -86,18 +93,18 @@ export function NavigationTabs({ activeTab, setActiveTab }: NavigationTabsProps)
           <span className="text-xs mt-1">Gratitude</span>
         </button>
         <button 
-          onClick={() => setActiveTab('analytics')}
-          className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'analytics' ? 'bg-accent' : ''}`}
-        >
-          <BarChart2 size={20} />
-          <span className="text-xs mt-1">Stats</span>
-        </button>
-        <button 
           onClick={() => setActiveTab('rpm')}
           className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'rpm' ? 'bg-accent' : ''}`}
         >
           <Zap size={20} />
           <span className="text-xs mt-1">RPM</span>
+        </button>
+        <button 
+          onClick={() => setActiveTab('analytics')}
+          className={`p-2 rounded-lg flex flex-col items-center ${activeTab === 'analytics' ? 'bg-accent' : ''}`}
+        >
+          <BarChart2 size={20} />
+          <span className="text-xs mt-1">Stats</span>
         </button>
         <button 
           onClick={() => setActiveTab('settings')}

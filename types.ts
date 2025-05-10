@@ -52,3 +52,31 @@ export type Goal = {
     starred: boolean;
     date: string; // ISO date string
   }
+
+  // In your types.ts
+export type AccountabilityRule = {
+  id: string;
+  name: string;
+  condition: {
+    type: 'goalCompletion' | 'meditation' | 'visualization';
+    threshold: number; // percentage or minutes
+  };
+  penalty: {
+    amount: number;
+    recipient: string;
+    message: string;
+  };
+  active: boolean;
+  lastTriggered?: string;
+  totalPenalties: number;
+};
+
+// In your types.ts
+export type VisualizationJournal = {
+  id: string;
+  visualizationId: string; // Links to the visualization
+  entry: string;
+  date: string; // ISO date
+  emotions: string[];
+  clarityRating: number; // 1-5
+};
