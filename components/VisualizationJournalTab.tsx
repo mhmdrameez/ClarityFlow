@@ -56,7 +56,7 @@ export function VisualizationJournalTab({
         <ul className="list-disc list-inside space-y-1 text-blue-700 text-sm">
           <li>Use present tense</li>
           <li>Add emotion (joy, pride, gratitude)</li>
-          <li>Include sensory detail (What do you see/hear/feel?)</li>
+          <li>Include sensory detail (What do you see/hear/feel)</li>
           <li>Be consistent (visualize for 2-5 mins daily)</li>
         </ul>
       </div>
