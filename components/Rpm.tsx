@@ -57,14 +57,7 @@ export function RPMDailyPlanner({
         <h2 className="dark:text-white">RPM Daily Planner by Tonny Robbins</h2>
       </div>
 
-      <div className="bg-blue-50 dark:bg-gray-800 p-4 rounded-lg border  dark:border-gray-700 mb-4">
-        <p className="font-medium mb-2">RPM Method:</p>
-        <ul className="list-disc list-inside dark:text-gray-300 text-sm space-y-1">
-          <li><strong>Purpose:</strong> Why is this important to you?</li>
-          <li><strong>Outcome:</strong> What specific result do you want?</li>
-          <li><strong>Massive Action:</strong> What steps will get you there?</li>
-        </ul>
-      </div>
+
 
       <div className="space-y-4 p-4 rounded-lg shadow-sm border dark:border-gray-700 dark:bg-gray-800">
       <div>
