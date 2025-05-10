@@ -54,7 +54,7 @@ export function RPMDailyPlanner({
     <div className="space-y-6">
       <div className="flex items-center gap-2 text-lg font-semibold">
         <Zap size={20} className=" dark:" />
-        <h2 className="dark:text-white">RPM Daily Planner</h2>
+        <h2 className="dark:text-white">RPM Daily Planner by Tonny Robbins</h2>
       </div>
 
       <div className="bg-blue-50 dark:bg-gray-800 p-4 rounded-lg border border-blue-100 dark:border-gray-700 mb-4">
